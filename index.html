@@ -194,6 +194,13 @@ details[open] .chev{transform:rotate(90deg)}
 .itin .vrow{background:var(--surface)}
 .itin .vrow .vt{min-width:86px}
 footer{margin-top:28px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.credit{margin-top:32px;background:var(--primary);color:var(--on-primary);border-radius:14px;
+  padding:16px 20px;display:flex;align-items:baseline;justify-content:center;gap:10px;flex-wrap:wrap;
+  box-shadow:var(--shadow)}
+.credit-mark{font-size:12.5px;letter-spacing:.08em;opacity:.85}
+.credit-main{font-family:"Hahmlet","IBM Plex Sans KR",serif;font-size:16.5px;font-weight:600;letter-spacing:.01em}
+.credit-main b{font-weight:800;text-decoration:underline;text-decoration-color:var(--accent);
+  text-decoration-thickness:2.5px;text-underline-offset:5px}
 @media (max-width:560px){
   .tl-row{grid-template-columns:52px 1fr 1fr}
   .dayrow{grid-template-columns:minmax(78px,100px) 1fr 1fr}
@@ -267,7 +274,7 @@ footer{margin-top:28px;font-size:12px;color:var(--muted);border-top:1px solid va
     <div style="overflow-x:auto"><table class="mini-tbl wide" id="daejeonTbl"></table></div>
     <p class="sub">2025년(제60회) 대전 직업계고 입상: 8직종 13명 — 금 3 · 은 2 · 동 3 · 장려 5 (메카트로닉스 2인 1조)</p>
   </div>
-  <footer>출처: 대전광역시교육청 과학직업정보과, 「직업계고 전공심화동아리 활성화 워크숍 및 경기장 참관 계획(학교안내용)」</footer>
+
 </section>
 
 <section id="p-staff" class="pane on">
@@ -278,7 +285,6 @@ footer{margin-top:28px;font-size:12px;color:var(--muted);border-top:1px solid va
     <p class="sub" style="margin-top:0">색칠된 칸이 출장 기간입니다. 위에서 선생님 이름을 누르면 세부 일정이 나옵니다.</p>
     <div style="overflow-x:auto"><table class="mini-tbl wide staff-matrix" id="staffMatrix"></table></div>
   </div>
-  <footer>출처: 「2026년 제61회 전국기능경기대회 초과근무계획」</footer>
 </section>
 
 <section id="p-venue" class="pane">
@@ -311,8 +317,13 @@ footer{margin-top:28px;font-size:12px;color:var(--muted);border-top:1px solid va
       <dt>인근 경기장</dt><dd>[제5경기장] 재능대학교 송도캠퍼스</dd>
     </dl>
   </div>
-  <footer>출처: 한국산업인력공단 대전지역본부, 「2026 인천 제61회 전국기능경기대회 직종별 경기일정표(안)」 · 본 일정표는 안(案)으로, 공모과제 선정 등에 따라 변동될 수 있습니다.</footer>
+
 </section>
+
+<div class="credit">
+  <span class="credit-mark">ⓒ 2026</span>
+  <span class="credit-main">대전도시과학고등학교 <b>김민성</b> 제작</span>
+</div>
 </div>
 
 <script>
