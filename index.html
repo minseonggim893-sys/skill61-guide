@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>제61회 전국기능경기대회</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@600;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#F6F7F5; --surface:#FFFFFF; --surface2:#EFF2EE; --line:#E0E4DF;
+  --ink:#1E2A32; --muted:#5C6A72; --primary:#175A7C; --on-primary:#FFFFFF;
+  --accent:#B08428; --gold-soft:#F3E9D2;
+  --st-tools:#64748B; --st-prep:#A87710; --st-comp:#175A7C; --st-score:#7C5CB0;
+  --st-end:#2E7D57; --st-cere:#B08428;
+  --shadow:0 1px 3px rgba(20,30,40,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11181D; --surface:#1A2329; --surface2:#212C33; --line:#2C3841;
+    --ink:#E5EAE9; --muted:#98A6AD; --primary:#63ACCF; --on-primary:#0E1B24;
+    --accent:#D8AF5C; --gold-soft:#3A3120;
+    --st-tools:#8C9AAB; --st-prep:#D2A138; --st-comp:#63ACCF; --st-score:#A98BD8;
+    --st-end:#5CAE8A; --st-cere:#D8AF5C;
+    --shadow:0 1px 3px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11181D; --surface:#1A2329; --surface2:#212C33; --line:#2C3841;
+  --ink:#E5EAE9; --muted:#98A6AD; --primary:#63ACCF; --on-primary:#0E1B24;
+  --accent:#D8AF5C; --gold-soft:#3A3120;
+  --st-tools:#8C9AAB; --st-prep:#D2A138; --st-comp:#63ACCF; --st-score:#A98BD8;
+  --st-end:#5CAE8A; --st-cere:#D8AF5C;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans KR",-apple-system,"Malgun Gothic",sans-serif;
+  font-size:15px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px 80px}
+
+header.hero{padding:28px 0 18px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12.5px;font-weight:500;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+h1{font-family:"Hahmlet","IBM Plex Sans KR",serif;font-weight:700;font-size:clamp(24px,5vw,34px);
+  margin:6px 0 4px;line-height:1.25;text-wrap:balance}
+h1 .num{color:var(--accent)}
+.hero-sub{color:var(--muted);font-size:14px;margin:0}
+.hero-sub b{color:var(--ink);font-weight:500}
+
+nav.tabs{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;gap:4px;
+  padding:10px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+nav.tabs button{flex:1;min-width:max-content;border:1px solid var(--line);background:var(--surface);
+  color:var(--muted);font:inherit;font-size:13.5px;font-weight:500;padding:8px 14px;border-radius:8px;cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+nav.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.pane{display:none;padding-top:16px}
+.pane.on{display:block}
+
+/* 직종별 */
+.toolbar{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:9px 12px}
+.search svg{flex:none;color:var(--muted)}
+.search input{border:0;background:none;color:var(--ink);font:inherit;width:100%;outline:none}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line);background:var(--surface);color:var(--muted);
+  font:inherit;font-size:12.5px;padding:5px 11px;border-radius:999px;cursor:pointer}
+.chips button.on{background:var(--surface2);border-color:var(--primary);color:var(--primary);font-weight:500}
+.chips button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.count{font-size:12.5px;color:var(--muted)}
+
+.cards{display:flex;flex-direction:column;gap:8px}
+details.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+details.card summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+details.card summary::-webkit-details-marker{display:none}
+.card .no{font-size:12px;color:var(--muted);min-width:20px;text-align:right;font-variant-numeric:tabular-nums}
+.card .nm{font-weight:700;font-size:15.5px;flex:1 1 auto;min-width:0}
+.card .vn{font-size:12px;color:var(--muted);white-space:nowrap}
+.star{border:0;background:none;cursor:pointer;font-size:17px;line-height:1;color:var(--line);padding:2px 4px}
+.star.on{color:var(--accent)}
+.star:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.card .chev{color:var(--muted);transition:transform .15s}
+details[open] .chev{transform:rotate(90deg)}
+.card-body{border-top:1px solid var(--line);padding:12px 14px 14px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px}
+.meta div{background:var(--surface2);border-radius:8px;padding:8px 10px}
+.meta dt{font-size:11.5px;color:var(--muted);margin-bottom:2px}
+.meta dd{margin:0;font-size:13px;font-weight:500;white-space:pre-line}
+.tl{display:flex;flex-direction:column;gap:2px}
+.tl-row{display:grid;grid-template-columns:64px 1fr 1fr;gap:8px;padding:7px 0;border-top:1px dashed var(--line);align-items:start}
+.tl-date{font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.tl-date small{display:block;font-weight:400;color:var(--muted)}
+.tl-date.today{color:var(--accent)}
+.slot{display:flex;flex-direction:column;gap:3px;min-width:0}
+.slot-l{font-size:10.5px;color:var(--muted);letter-spacing:.06em}
+.tag{font-size:12px;line-height:1.4;padding:3px 8px;border-radius:6px;border-left:3px solid var(--stc,var(--muted));
+  background:color-mix(in srgb, var(--stc,var(--muted)) 10%, transparent);white-space:pre-line;word-break:keep-all}
+.empty-slot{font-size:12px;color:var(--line)}
+.note-box{margin-top:10px;font-size:12.5px;color:var(--muted);white-space:pre-line;
+  border-left:3px solid var(--accent);padding:4px 10px;background:color-mix(in srgb, var(--accent) 7%, transparent);border-radius:0 6px 6px 0}
+
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:2px 0 12px}
+.legend span{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}
+.legend i{width:10px;height:10px;border-radius:3px;background:var(--stc)}
+
+/* 일자별 */
+.daystrip{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px}
+.daystrip button{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;
+  padding:7px 2px;border-radius:9px;cursor:pointer;text-align:center}
+.daystrip .d{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.daystrip .w{display:block;font-size:11px;color:var(--muted)}
+.daystrip button.on{background:var(--primary);border-color:var(--primary)}
+.daystrip button.on .d,.daystrip button.on .w{color:var(--on-primary)}
+.daystrip button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.daystrip .today-dot{display:block;width:4px;height:4px;border-radius:50%;background:var(--accent);margin:2px auto 0}
+.vgroup{margin-bottom:18px}
+.vgroup h3{font-family:"Hahmlet",serif;font-size:15.5px;margin:0 0 8px;display:flex;align-items:baseline;gap:8px}
+.vgroup h3 small{font-weight:400;font-size:12px;color:var(--muted)}
+.dayrow{display:grid;grid-template-columns:minmax(90px,130px) 1fr 1fr;gap:8px;padding:8px 10px;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:6px;align-items:start}
+.dayrow .nm2{font-weight:500;font-size:13.5px;word-break:keep-all}
+.dayrow .nm2 .fav{color:var(--accent)}
+
+/* 경기장 */
+.venues{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.vcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+.vcard .vk{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+.vcard h3{font-family:"Hahmlet",serif;margin:3px 0 8px;font-size:16px}
+.vcard .vlist{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.vcard .vlist span{font-size:11.5px;background:var(--surface2);border-radius:999px;padding:3px 8px;cursor:pointer}
+.vcard a{font-size:12.5px;color:var(--primary);text-decoration:none;font-weight:500}
+.vcard a:hover{text-decoration:underline}
+
+/* 안내 */
+.info-sec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.info-sec h3{font-family:"Hahmlet",serif;margin:0 0 8px;font-size:16px}
+.info-sec p,.info-sec li{font-size:13.5px;color:var(--ink);white-space:pre-line;word-break:keep-all}
+.info-sec .sub{color:var(--muted);font-size:12.5px}
+.stay{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13.5px}
+.stay dt{color:var(--muted)}
+.stay dd{margin:0;font-weight:500}
+.warn-chip{display:inline-block;background:var(--gold-soft);color:var(--accent);border-radius:6px;
+  padding:2px 8px;font-size:12.5px;font-weight:700;margin-right:4px}
+
+/* 워크숍·참관 */
+.mini-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+.mini-tbl td,.mini-tbl th{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top;word-break:keep-all}
+.mini-tbl td:first-child{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+.mini-tbl th{background:var(--surface2);font-size:12px;font-weight:700}
+.mini-tbl tr.ours-row td{background:color-mix(in srgb, var(--accent) 10%, transparent);font-weight:700}
+.visit-day{margin:14px 0 6px;font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:8px}
+.visit-day .vipb{font-size:11px;font-weight:700;color:var(--on-primary);background:var(--primary);border-radius:999px;padding:2px 9px}
+.vrow{display:grid;grid-template-columns:86px 1fr;gap:10px;padding:9px 12px;background:var(--surface2);
+  border-radius:10px;margin-bottom:5px;align-items:start}
+.vrow.ours{background:color-mix(in srgb, var(--accent) 12%, transparent);border:1px solid color-mix(in srgb, var(--accent) 45%, transparent)}
+.vrow .vt{font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.vrow .vc{font-size:13px;word-break:keep-all}
+.vrow .vc .pl{display:block;font-size:12px;color:var(--muted)}
+.vrow.ours .vc .ours-b{color:var(--accent);font-weight:700}
+.dayrow.ours{border-left:3px solid var(--accent)}
+.dayrow.ours .nm2{color:var(--accent)}
+.day-visits{margin-bottom:16px}
+.day-visits h3{font-family:"Hahmlet",serif;font-size:15.5px;margin:0 0 8px;color:var(--accent)}
+.school-badge{font-size:10.5px;font-weight:700;color:var(--accent);border:1px solid var(--accent);
+  border-radius:999px;padding:1px 7px;white-space:nowrap}
+
+/* 선생님 일정 */
+.staff-matrix td{text-align:center;font-variant-numeric:tabular-nums}
+.staff-matrix td:first-child,.staff-matrix th:first-child{text-align:left;white-space:nowrap}
+.staff-matrix td.trip{background:color-mix(in srgb, var(--primary) 12%, transparent)}
+.staff-matrix td.trip b{color:var(--primary)}
+.staff-matrix .rolecell small{display:block;color:var(--muted);font-size:11px;font-weight:400}
+.staff-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;
+  margin-bottom:12px;box-shadow:var(--shadow)}
+.staff-card h3{font-family:"Hahmlet",serif;margin:0 0 2px;font-size:16px}
+.staff-card .trip-line{font-size:13px;color:var(--primary);font-weight:500;margin:0 0 8px}
+.staff-card ul{margin:0 0 10px;padding-left:18px}
+.staff-card li{font-size:13px;color:var(--ink);word-break:keep-all;margin-bottom:2px}
+.staff-tabs{margin-bottom:12px}
+.staff-tabs button{font-size:13.5px;padding:7px 14px;font-weight:500}
+.staff-tabs button.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.staff-pop{position:relative;border:1px solid color-mix(in srgb, var(--primary) 45%, transparent);
+  background:color-mix(in srgb, var(--primary) 5%, var(--surface))}
+.staff-pop .pop-sub{font-family:"IBM Plex Sans KR",sans-serif;font-size:12.5px;font-weight:400;color:var(--muted)}
+.pop-close{position:absolute;top:10px;right:12px;border:0;background:none;color:var(--muted);
+  font-size:20px;line-height:1;cursor:pointer;padding:4px}
+.pop-close:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.staff-matrix tr.sel td{background:color-mix(in srgb, var(--accent) 10%, transparent)}
+.staff-matrix tr.sel td.trip{background:color-mix(in srgb, var(--primary) 28%, transparent)}
+.itin{margin-bottom:12px}
+.itin-h{font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--muted);margin:0 0 2px}
+.itin .visit-day{margin:10px 0 5px}
+.itin .vrow{background:var(--surface)}
+.itin .vrow .vt{min-width:86px}
+footer{margin-top:28px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:560px){
+  .tl-row{grid-template-columns:52px 1fr 1fr}
+  .dayrow{grid-template-columns:minmax(78px,100px) 1fr 1fr}
+}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <p class="eyebrow">2026 인천광역시 · 8. 22.(토) – 8. 28.(금) · 대전도시과학고등학교</p>
+  <h1>제<span class="num">61</span>회 전국기능경기대회</h1>
+  <p class="hero-sub">우리 학교 출전 <b>자동차페인팅(2명) · 산업용드론제어(4명)</b> — 제5경기장 재능대학교 송도캠퍼스</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-pane="p-staff">선생님 일정</button>
+  <button role="tab" aria-selected="false" data-pane="p-skill">직종별 일정</button>
+  <button role="tab" aria-selected="false" data-pane="p-day">일자별 보기</button>
+  <button role="tab" aria-selected="false" data-pane="p-visit">워크숍·참관</button>
+  <button role="tab" aria-selected="false" data-pane="p-venue">경기장</button>
+  <button role="tab" aria-selected="false" data-pane="p-info">안내·숙소</button>
+</nav>
+
+<section id="p-skill" class="pane">
+  <div class="toolbar">
+    <label class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="q" type="search" placeholder="직종명 검색 (예: 용접, CAD, 요리)" aria-label="직종명 검색">
+    </label>
+    <div class="chips" id="venueChips"></div>
+    <div class="legend" id="legend"></div>
+    <p class="count" id="count"></p>
+  </div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section id="p-day" class="pane">
+  <div class="daystrip" id="daystrip"></div>
+  <div id="dayBody"></div>
+</section>
+
+<section id="p-visit" class="pane">
+  <div class="info-sec">
+    <h3>전공심화동아리 활성화 워크숍</h3>
+    <dl class="stay">
+      <dt>일시</dt><dd>2026. 8. 24.(월) 11:30 ~ 14:00</dd>
+      <dt>장소</dt><dd>라마다송도호텔</dd>
+      <dt>참석</dt><dd>교육감, 교육청 직업교육 담당자, 직업계고 교장·부장교사 등 60명 내외 (교당 4명 이하)</dd>
+    </dl>
+    <table class="mini-tbl">
+      <tr><td>11:30~12:00</td><td>등록</td></tr>
+      <tr><td>12:00~12:10</td><td>교육감 격려사</td></tr>
+      <tr><td>12:10~12:30</td><td>대전 직업계고 전공심화동아리 운영현황 (담당 장학사)</td></tr>
+      <tr><td>12:30~14:00</td><td>자유토론 — 기능경기대회 및 전공심화동아리 활성화 방안</td></tr>
+    </table>
+  </div>
+  <div class="info-sec">
+    <h3>개회식·경기장 참관 일정</h3>
+    <p class="sub" style="margin-top:0">상기 일정은 상황에 따라 변동될 수 있습니다. <b style="color:var(--accent)">★ 표시</b>는 우리 학교 직종 참관입니다.</p>
+    <div id="visitList"></div>
+  </div>
+  <div class="info-sec">
+    <h3>참가학교 격려 간담회</h3>
+    <dl class="stay">
+      <dt>일시</dt><dd>2026. 8. 25.(화) 17:00 ~ 20:00</dd>
+      <dt>장소</dt><dd>인천 송도 인근 식당</dd>
+      <dt>참석</dt><dd>부교육감, 직업교육 담당자, 참가 특성화고 8교 교장·부장교사 등 25명 내외 (교당 2명 이하)</dd>
+    </dl>
+  </div>
+  <div class="info-sec">
+    <h3>대전 직업계고 참가 현황 — 8교 · 18개 직종 · 54명</h3>
+    <div style="overflow-x:auto"><table class="mini-tbl wide" id="daejeonTbl"></table></div>
+    <p class="sub">2025년(제60회) 대전 직업계고 입상: 8직종 13명 — 금 3 · 은 2 · 동 3 · 장려 5 (메카트로닉스 2인 1조)</p>
+  </div>
+  <footer>출처: 대전광역시교육청 과학직업정보과, 「직업계고 전공심화동아리 활성화 워크숍 및 경기장 참관 계획(학교안내용)」</footer>
+</section>
+
+<section id="p-staff" class="pane on">
+  <div class="chips staff-tabs" id="staffTabs"></div>
+  <div id="staffDetail"></div>
+  <div class="info-sec">
+    <h3>출장 일정 한눈에 보기</h3>
+    <p class="sub" style="margin-top:0">색칠된 칸이 출장 기간입니다. 위에서 선생님 이름을 누르면 세부 일정이 나옵니다.</p>
+    <div style="overflow-x:auto"><table class="mini-tbl wide staff-matrix" id="staffMatrix"></table></div>
+  </div>
+  <footer>출처: 「2026년 제61회 전국기능경기대회 초과근무계획」</footer>
+</section>
+
+<section id="p-venue" class="pane">
+  <div class="venues" id="venueCards"></div>
+</section>
+
+<section id="p-info" class="pane">
+  <div class="info-sec">
+    <h3>대회 개요</h3>
+    <p>2026 인천광역시에서 열리는 제61회 전국기능경기대회입니다.
+경기 기간은 <b>2026. 8. 22.(토) ~ 8. 28.(금)</b>이며, 51개 직종이 인천 시내 6개 경기장에서 진행됩니다.
+폐회식은 8. 28.(금)에 열립니다.</p>
+  </div>
+  <div class="info-sec">
+    <h3>꼭 확인하세요</h3>
+    <ul id="notesList"></ul>
+  </div>
+  <div class="info-sec">
+    <h3>유의직종 (과제 미공개·보안자료 직종)</h3>
+    <p><span class="warn-chip">기계설계/CAD</span><span class="warn-chip">사이버보안</span><span class="warn-chip">클라우드컴퓨팅</span></p>
+    <p class="sub">과제 미공개 및 보안재료(자료)를 필요로 하는 직종으로, 다음 과제 진행 시 유의가 필요합니다.</p>
+  </div>
+  <div class="info-sec">
+    <h3>숙소 안내 — 대전도시과학고등학교</h3>
+    <dl class="stay">
+      <dt>숙소명</dt><dd>호텔498</dd>
+      <dt>주소</dt><dd>인천 연수구 용담로85번길 24 (청학동)</dd>
+      <dt>객실 / 인원</dt><dd>7실 / 8명</dd>
+      <dt>전화</dt><dd>032-899-9300</dd>
+      <dt>인근 경기장</dt><dd>[제5경기장] 재능대학교 송도캠퍼스</dd>
+    </dl>
+  </div>
+  <footer>출처: 한국산업인력공단 대전지역본부, 「2026 인천 제61회 전국기능경기대회 직종별 경기일정표(안)」 · 본 일정표는 안(案)으로, 공모과제 선정 등에 따라 변동될 수 있습니다.</footer>
+</section>
+</div>
+
+<script>
+const DATA = {"notes":["※ 본 일정은 안내용입니다. 선수의 사전준비시간 및 경기장 입장 시간은 심사장 직무수행계획서에 따르며, 직종별 일정은 변동 가능성이 있습니다.\n    공모과제 선정 후 변동사항이 반영될 예정이므로 대회일 전까지 지속적인 확인이 필요합니다.   각 칸은 시작 일정을 표기한 것이며, 해당 칸만 진행하는 것이 아닙니다.\n     채점 시기는 직종별로 다르며, 경기종료 후에만 채점 하는것은 아닙니다.","※ 「기능경기대회 관리규칙」 제78조(선수확인 및 출석)\n   ① 심사장 또는 부심사장은 경기시작 이전에 선수증 등에 따라 본인 여부를 확인하여야 합니다.\n   ② 참가선수는 경기일정(사전 준비시간 포함)에 모두 참여하여야 하며, 앞과제(사전 준비시간 포함) 경기에 참석하지 않으면 현재 과제 경기에 참여할 수 없습니다.","○ 직종별 선수 숫자 및 작업환경에 따라 다음과제 진행여부 결정\n    ※ 유의직종(3직종) :  기계설계/CAD, 사이버보안, 클라우드컴퓨팅   → 과제 미공개 및 보안재료(자료)를 필요로 하는 직종으로 다음 과제 진행 시 유의"],"serials":[{"col":5,"serial":46256},{"col":7,"serial":46257},{"col":9,"serial":46258},{"col":11,"serial":46259},{"col":13,"serial":46260},{"col":15,"serial":46261},{"col":17,"serial":46262}],"events":[{"no":1,"name":"폴리메카닉스","tasks":"4","duration":"11시간","taskTimes":"제1과제 : 6시간\n제2과제 : 3시간\n제3과제 : 1시간\n제4과제 : 1시간","days":["공구 및 장비반입","1,2과제 사전준비\n(A조)","1,2과제 진행(A조)\n(B조)","1,2과제 진행(A조)\n(19:00~)\n1,2과제 사전준비(B조)","1,2과제 채점(A조)\n1,2과제 진행(B조)\n(C조)","1,2과제 채점(A조)\n1,2과제 진행(B조)\n(19:00~)\n1,2과제 사전준비C조)","제1과제(A조)\n1,2과제 채점(B조)\n1,2과제 진행(C조)","1,2과제 채점(B조)\n1,2과제 진행(C조)","3,4과제 사전 준비(A,B,C조 전체)\n1,2과제 채점(C조)","3,4과제 사전 준비(A,B,C조 전체)\n1,2과제 채점(C조)","3,4과제 진행\n및  채점\n(A,B,C조 전체)","3,4과제 진행\n및  채점\n(A,B,C조 전체)","채점 결과 발표 및 경기 강평","폐회식"],"note":"*교대실시\n* 8.22.(토) 오후 B,C조 장비셋팅 시 참관 및 공동 점검\n*제2과제 공통과제\n*제3과제 시스템 구성 제외 조별 운영","dist":"과제별\n별도배부","openTotal":"3","openBefore":"3","openAfter":"","supply":"채점기준\n과제별 지급","venue":"송도컨벤시아","extra":""},{"no":2,"name":"금형","tasks":"2","duration":"9시간","taskTimes":"제1과제 : 1시간\n제2과제 : 8시간\n(2-1과제:2시간/\n2-2과제:3시간/\n2-3과 제:2시간 30분/\n2-4과제: 인당 30분)","days":["공구반입","공구반입","사전준비시간","제1과제\n제2-1과제","제2-2과제 A조","제2-2과제 B조\n제2-3과제 A조","제2-2과제 C조\n제2-3과제 B조\n제2-4과제 A조","제2-3과제 C조\n제2-4과제 B조","제2-4과제 C조","경기종료 채점","채점","채점종료","","폐회식"],"note":"*교대실시\n*제1과제 후, 제2과제 CAM작업 진행","dist":"과제별\n별도배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"","venue":"인천기계공업고등학교","extra":""},{"no":3,"name":"기계설계/CAD","tasks":"4","duration":"13시간~18시간\n(공모과제\n선정 후 확정)","taskTimes":"제1과제 : 4시간~5시간\n제2과제 : 3시간~4시간\n제3과제 : 4시간~5시간\n제4과제 : 2시간~4시간","days":["","프로그램설치\n(부심사장)","사전준비시간","제4과제\n출제 및 경기","제1과제\n출제","제1과제\n경기","제2과제\n출제","제2과제\n경기","제3과제\n출제","제3과제\n경기\n경기종료 채점","채점종료","","","폐회식"],"note":"*프로그램설치-부심사장 입회\n*제4과제 보완과제","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"","venue":"인천기계공업고등학교","extra":""},{"no":4,"name":"CNC/선반","tasks":"2","duration":"10시간 15분","taskTimes":"프로그램 : 2시간\n제1과제 : 3시간 30분\n제2과제 : 4시간 45분","days":["공구반입","공구반입","사전준비시간\n장비 시운전","과제검토 및\n 프로그래밍","A조 1과제\nC조 2과제","B조 1과제\nD조 2과제","A조 2과제\nC조 1과제","B조 2과제\nD조 1과제","경기종료 채점","채점","채점종료","","","폐회식"],"note":"* 제1,2과제는 조별 운영","dist":"단일배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"","venue":"인천기계공업고등학교","extra":""},{"no":5,"name":"CNC/밀링","tasks":"2","duration":"9.0시간","taskTimes":"프로그램 : 3.0시간\n제1과제 : 3.0시간\n제2과제 : 3.0시간","days":["공구 및 장비반입","공구 및 장비반입","사전준비시간","장비 시운전","장비 시운전","과제검토 및\n프로그래밍","A조 1과제","A조 2과제","B조 1과제","B조 2과제","채점","채점종료","","폐회식"],"note":"*교대실시","dist":"단일배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"","venue":"인천기계공업고등학교","extra":""},{"no":6,"name":"프로토타입모델링","tasks":"2","duration":"17시간","taskTimes":"제1과제 : 3시간\n제2과제 : 14시간","days":["공구반입","사전준비시간","사전준비시간","제1과제","제2과제","","","","경기종료","채점","채점종료","","","폐회식"],"note":"*제2과제 밀링/선반/CNC 교대실시","dist":"과제별\n별도배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":7,"name":"냉동기술","tasks":"4","duration":"14시간30분","taskTimes":"제1과제 : 6시간\n제2과제 : 4시간\n제3과제 : 2시간\n제4과제 : 2시간 30분","days":["공구반입","공구반입 및\n사전준비","사전준비시간","제1과제","제1과제","1과제 채점","제2과제","2과제 채점","제3과제","3과제 채점","제4과제","4과제 채점","채점 종료 및 발표","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"채점기준\n과제별 지급","venue":"부평공업고등학교","extra":""},{"no":8,"name":"산업용드론제어","tasks":"3","duration":"24시간","taskTimes":"제1과제 : 8시간\n제2과제 : 8시간\n제3과제 : 8시간","days":["공구장비반입","","","사전준비시간","제1과제","","제2과제","","제3과제","경기종료","채점종료","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"채점기준\n과제별 지급","venue":"재능대학교 송도캠퍼스","extra":""},{"no":9,"name":"용접","tasks":"4","duration":"15~18시간","taskTimes":"제1과제 : 3시간~3시간 30분\n제2과제 : 8시간~9시간\n제3과제 : 3시간~4시간\n제4과제 : 1시간~1시간 30분","days":["","사전준비시간","3과제\n1경기(A조)","3과제 채점","3과제\n1경기(B조)","3과제 채점\n제2경기 진출자 발표","1,4,2과제\n제2경기","","","경기종료","채점","채점종료","","폐회식"],"note":"","dist":"단일배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"","venue":"인천소방고등학교","extra":""},{"no":10,"name":"배관","tasks":"3","duration":"12시간","taskTimes":"제1과제 및 제2과제 : 5시간\n제3과제 : 7시간","days":["","공구 및 장비반입 사전준비시간","사전준비시간","제1과제 제2과제","제1과제 제2과제","","제3과제","","경기종료","채점","","채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"3","openBefore":"3","openAfter":"","supply":"채점기준\n과제별 지급","venue":"재능대학교 송도캠퍼스","extra":""},{"no":11,"name":"주조","tasks":"3","duration":"15시간","taskTimes":"제1과제 : 5시간\n제2과제 : 5시간\n제3과제 : 5시간","days":["공구반입","공구반입","사전준비시간","장비 시운전\n및 사전준비시간","제1과제","","제2과제","","제3과제","경기종료","채점","채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"3","openBefore":"","openAfter":"3","supply":"채점기준\n과제별 지급","venue":"인천기계공업고등학교","extra":""},{"no":12,"name":"자동차정비","tasks":"6","duration":"4.5시간","taskTimes":"제1-1과제 : 40분\n제1-2과제 : 40분\n제1-3과제 : 30분\n제1-4과제 : 40분\n제2-1과제 : 1시간\n제2-2과제 : 1시간","days":["","사전준비시간","제1-1과제","제1-2과제","제1-3과제 제1-4과제","","제2-1과제","","제2-2과제","경기종료 채점","채점종료","","","폐회식"],"note":"","dist":"단일배부","openTotal":"6","openBefore":"6","openAfter":"","supply":"","venue":"인천기계공업고등학교","extra":""},{"no":13,"name":"자동차차체수리","tasks":"1","duration":"15시간","taskTimes":"단일과제","days":["","공구반입","사전준비시간","단일과제","","","","","","경기종료 채점","채점종료","","","폐회식"],"note":"단일과제로 동시작업 진행","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"재능대학교 송도캠퍼스","extra":""},{"no":14,"name":"자동차페인팅","tasks":"4","duration":"9시간","taskTimes":"제1과제 : 2시간 30분\n제2과제 : 1시간 30분\n제3과제 : 2시간 30분\n제4과제 : 1시간 30분","days":["공구반입","사전준비시간","사전준비시간","제1과제","제2과제","제1과제","","제3과제","","제4과제\n경기종료","채점종료","","","폐회식"],"note":"교대실시","dist":"단일배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"","venue":"재능대학교 송도캠퍼스","extra":""},{"no":15,"name":"농업기계정비","tasks":"4","duration":"480분","taskTimes":"제1과제 : 180분\n제2과제 : 180분\n제3과제 : 60분\n제4과제 : 60분","days":["","사전준비시간","제1과제","","제2과제","","제3과제","","제4과제","","경기종료\n채점종료","","","폐회식"],"note":"교대실시","dist":"단일배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"","venue":"재능대학교 송도캠퍼스","extra":""},{"no":16,"name":"판금철골구조물","tasks":"3","duration":"12시간","taskTimes":"제1과제 : 1시간 30분(전개도)\n제2과제 : 2시간 30분\n제3과제 : 8시간","days":["","공구 및 장비반입","사전준비시간","제1과제 제2과제","","제3과제","","경기종료","채점","","채점종료","","","폐회식"],"note":"","dist":"단일배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"","venue":"재능대학교 송도캠퍼스","extra":""},{"no":17,"name":"공업전자기기","tasks":"4","duration":"17시간 30분","taskTimes":"제1과제 : 7시간 30분\n제2과제 : 3시간\n제3과제 : 3시간30분\n제4과제 : 3시간30분","days":["","","사전준비시간","제1과제\n(PCB설계)","제1과제\n(회로설계)","제3과제","제2과제","4과제","제1과제","경기종료\n채점종료","","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"채점기준\n과제별 지급","venue":"인천전자마이스터고등학교","extra":""},{"no":18,"name":"전기제어","tasks":"3","duration":"12시간 30분","taskTimes":"제1과제 : 5시간\n제2과제 : 6시간 30분\n제3과제 : 1시간","days":["","기술회의","사전준비","제3과제","제1과제","채점","채점","제2과제","제2과제","채점","채점","채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"5","openBefore":"5","openAfter":"","supply":"","venue":"인천기계공업고등학교","extra":""},{"no":19,"name":"산업제어","tasks":"3","duration":"10시간","taskTimes":"제1과제 : 1시간\n제2과제 : 7시간\n제3과제 : 2시간","days":["공구반입","공구반입","사전준비시간","제2과제","","","제3과제","","","","제1과제","경기종료\n채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":20,"name":"전기기기","tasks":"2","duration":"17시간 00분","taskTimes":"제1과제 : 9시간 30분\n제2과제 : 7시간 30분","days":["공구반입","공구반입","사전준비시간","제1과제(H/W)","1과제(H/W)","1과제(S/W)","제2과제(H/W)","2과제(S/W)","채점","채점","채점","채점종료","시상식","폐회식"],"note":"내년부터 1과제 기판은 PCB 방식으로 제작하여 지참하도록 변경하고,\n기판 배선 및 납땜 작업을 최소화하는 방향으로 검토 중\n이를 통해 1과제 하드웨어 제작 시간을\n약 1~2시간 정도 단축할 수 있을 것으로 예상","dist":"과제별\n별도배부","openTotal":"3","openBefore":"3","openAfter":"","supply":"","venue":"부평공업고등학교","extra":""},{"no":21,"name":"모바일로보틱스","tasks":"4","duration":"16시간","taskTimes":"제1과제 : 3시간(평가시간포함)\n제2과제 : 3시간(평가시간포함)\n제3과제 : 5시간(평가시간포함)\n제4과제 : 5시간(평가시간포함)","days":["","","사전준비시간","사전준비시간","제1과제 제2과제","","제3과제","","제4과제","경기종료\n채점종료","","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"","venue":"인천소방고등학교","extra":""},{"no":22,"name":"통신망분배기술","tasks":"5","duration":"13시간","taskTimes":"제1과제 : 2시간\n제2과제 : 4시간 30분\n제3과제 : 4시간 30분\n제4과제 : 1시간\n제5과제 : 1시간","days":["","공구반입","사전준비시간","사전준비시간","제1과제","제5과제","제2과제","","제3과제","","제4과제","경기종료\n채점종료","","폐회식"],"note":"- 토요일 장비 반입\n-일요일 자리배치 및 장비 설치","dist":"과제별\n별도배부","openTotal":"5","openBefore":"5","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":23,"name":"메카트로닉스","tasks":"2","duration":"6시간","taskTimes":"제1과제:3시간\n제2과제: 3시간","days":["","공구반입","사전준비시간","사전준비시간","제1과제","","제1과제 채점","","제2과제","","제2과제 채점","채점종료","","폐회식"],"note":"- 토요일 장비 반입 및 팀별설치 완료 (사전 준비 시간전 장비반입 및 설치완료)\n- 사전준비 날짜에 지급 PC 분배","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"채점기준\n과제별 지급","venue":"송도컨벤시아","extra":""},{"no":24,"name":"산업용로봇","tasks":"3","duration":"9시간 30분","taskTimes":"제1과제 : 3시간 30분\n제2과제 : 3시간\n제3과제 : 3시간","days":["","","","사전준비시간","","","제1과제","","제2과제","","제3과제","경기종료\n채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"3","openBefore":"3","openAfter":"","supply":"채점기준\n과제별 지급","venue":"송도컨벤시아","extra":""},{"no":25,"name":"타일","tasks":"4","duration":"16시간 단일과제","taskTimes":"모듈A : 6시간\n모듈B : 4시간\n모듈C : 3시간\n모듈D : 3시간","days":["","","사전준비시간","","","모듈A","","모듈A 모듈B","","모듈C 모듈D","모듈D\n경기종료 채점","채점종료","","폐회식"],"note":"","dist":"단일배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":26,"name":"가구","tasks":"1","duration":"18시간","taskTimes":"단일과제","days":["공구반입","공구반입","사전준비시간","단일과제","","","","","경기종료","채점","채점종료","","","폐회식"],"note":"","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":27,"name":"실내장식","tasks":"1","duration":"18시간","taskTimes":"단일과제","days":["","공구반입","사전준비시간","사전준비시간","경기준비","단일과제경기","단일과제경기","단일과제경기","단일과제경기","경기종료","채점","채점종료","","폐회식"],"note":"","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":28,"name":"목공","tasks":"1","duration":"16시간(기준)\n14~20시간\n선정된 과제 난이도에 따름","taskTimes":"단일과제","days":["공구반입","사전준비시간","사전준비시간","단일과제","","","","","","경기종료 채점","채점종료","","","폐회식"],"note":"","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":29,"name":"건축설계/CAD","tasks":"4","duration":"11시간","taskTimes":"제1과제 : 3시간\n 제2과제 : 2시간\n제3과제 : 3시간\n제4과제 : 3시간","days":["","","사전준비시간","제1과제","제2과제","제3과제","제4과제 경기종료","경기종료","채점","","","채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"채점기준\n과제별 지급","venue":"인천기계공업고등학교","extra":""},{"no":30,"name":"정보기술","tasks":"3","duration":"12시간","taskTimes":"제1과제 : 3시간\n제2과제 : 3시간\n제3과제 : 3시간\nTeam Project : 3시간","days":["","","사전준비시간","제1과제","제2과제","","제3과제","Team Project\n경기종료","채점","","","채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"3","openBefore":"3","openAfter":"","supply":"채점기준\n과제별 지급","venue":"인천전자마이스터고등학교","extra":""},{"no":31,"name":"IT네트워크시스템","tasks":"4","duration":"16시간","taskTimes":"제1과제 : 4시간\n제2과제 : 4시간\n제3과제 : 4시간\n제4과제 : 4시간","days":["","","","사전준비시간","제1과제","","제2과제","","제3과제","","제4과제 경기종료 채점","채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"채점기준\n과제별 지급","venue":"송도컨벤시아","extra":""},{"no":32,"name":"게임개발","tasks":"1","duration":"16시간","taskTimes":"단일과제","days":["","사전준비시간","단일과제","","","","경기종료","채점","채점종료","","","","","폐회식"],"note":"","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"인천기계공업고등학교","extra":""},{"no":33,"name":"웹디자인 및 개발","tasks":"1","duration":"14시간","taskTimes":"단일과제\n모듈A : 4시간\n모듈B : 3시간\n모듈C : 3시간\n이벤트 경기 : 4시간","days":["","","사전준비시간","모듈A","","모듈B","","모듈C","","이벤트경기 경기종료 채점","채점종료","","","폐회식"],"note":"","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"부평공업고등학교","extra":""},{"no":34,"name":"그래픽디자인","tasks":"3","duration":"15시간","taskTimes":"제1과제 : 5시간\n제2과제 : 5시간\n제3과제 : 5시간","days":["","사전준비시간","제1과제","","제2과제","","제3과제","경기종료","채점","채점","채점","채점종료","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"3","openBefore":"3","openAfter":"","supply":"","venue":"부평공업고등학교","extra":""},{"no":35,"name":"제품디자인","tasks":"1","duration":"14시간","taskTimes":"단일과제\n모듈1, 2 : 7시간\n모듈 3, 4, 5 : 7시간","days":["","","사전준비시간","사전준비시간","제1과제","","제2과제","경기종료","채점","채점","채점종료","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"","venue":"부평공업고등학교","extra":""},{"no":36,"name":"애니메이션","tasks":"1","duration":"20시간","taskTimes":"단일과제","days":["","","사전준비시간","단일과제","","","","","경기종료","채점","","채점종료","","폐회식"],"note":"","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"인천소방고등학교","extra":"기존 경기종료시간 8.26(수) 오후 → 오전"},{"no":37,"name":"클라우드컴퓨팅","tasks":"3","duration":"11시간","taskTimes":"제1과제 : 4시간\n제2과제 : 4시간\n제3과제 : 3시간","days":["","공구 및 장비반입 사전준비시간","사전준비완료\n제1과제","","제2과제","","제3과제 경기종료 채점","채점종료","","","","","","폐회식"],"note":"* 매 과제 시작 시, 선수에게 과제 공개 (미리 공개하지 아니함)","dist":"과제별\n별도배부","openTotal":"3","openBefore":"","openAfter":"3","supply":"채점기준\n과제별 지급","venue":"인천소방고등학교","extra":""},{"no":38,"name":"사이버보안","tasks":"3","duration":"12시간","taskTimes":"제1과제 : 4시간\n제2과제 : 4시간\n제3과제 : 4시간","days":["","","","사전준비시간","제1과제","","제2과제","","제3과제","경기종료\n채점종료","","","","폐회식"],"note":"*제1과제 : 미공개분 공개, 배포자료(파일)\n*제2과제 : 배포자료(파일)\n*제3과제 : 배포자료(파일)","dist":"과제별\n별도배부","openTotal":"3","openBefore":"","openAfter":"3","supply":"채점기준\n과제별 지급","venue":"인천전자마이스터고등학교","extra":""},{"no":39,"name":"모바일앱개발","tasks":"1","duration":"9시간","taskTimes":"단일과제\n모듈A: 3시간\n모듈B: 3시간\n모듈C: 3시간","days":["","","사전준비시간\n(대회장환경)","사전준비시간\n(사전점검)","","모듈A","","모듈B","","모듈C","채점","채점종료","","폐회식"],"note":"","dist":"","openTotal":"","openBefore":"","openAfter":"","supply":"","venue":"인천소방고등학교","extra":""},{"no":40,"name":"목공예","tasks":"1","duration":"16시간","taskTimes":"단일과제","days":["","공구 및 장비반입","사전준비시간","단일과제","","","","경기종료","채점","채점종료","","","","폐회식"],"note":"","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":41,"name":"귀금속공예","tasks":"1","duration":"14시간","taskTimes":"단일과제","days":["","사전준비시간","단일과제","","","","","경기종료","채점","채점종료","","","","폐회식"],"note":"","dist":"단일배부","openTotal":"1","openBefore":"1","openAfter":"","supply":"","venue":"부평공업고등학교","extra":""},{"no":42,"name":"보석가공","tasks":"2","duration":"10시간~11시간 (공모과제 선정 후 확정)","taskTimes":"제1과제 : 5시간~5시간 30분\n제2과제 : 5시간~5시간 30분","days":["","","사전준비시간","","제1과제","","제2과제","경기종료","채점","채점종료","","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"채점기준 및\n지급재료\n과제별 지급","venue":"부평공업고등학교","extra":""},{"no":43,"name":"도자기","tasks":"2","duration":"14시간","taskTimes":"제1, 2과제 : 14시간 (동일시행)","days":["","공구 및 장비반입 사전준비시간","사전준비","제1과제 제2과제","ㄱㅎㅎ","제1과제 제2과제\n경기종료","채점","채점종료","","","","","","폐회식"],"note":"","dist":"단일배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":44,"name":"의상디자인","tasks":"4","duration":"16시간","taskTimes":"제1과제 : 1시간\n제2과제 : 1시간 30분\n제3과제 : 3시간\n제4과제 : 10시간 30분","days":["","공구 및 장비반입 사전준비시간","제1과제 제2과제","제3과제 제4과제","","","경기종료","채점","","채점종료","","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"지급재료\n과제별지급","venue":"송도컨벤시아","extra":""},{"no":45,"name":"한복","tasks":"2","duration":"16시간","taskTimes":"제1과제 : 2시간 30분\n제2과제 : 13시간 30분","days":["","공구 및 장비반입 사전준비시간","제1과제","제2과제","","","경기종료","채점","","","채점종료","","","폐회식"],"note":"제1과제 : 제도 동시 시행, 제2과제 : 제작 동시 시행","dist":"과제별\n별도배부","openTotal":"2","openBefore":"2","openAfter":"","supply":"지급재료\n과제별지급","venue":"송도컨벤시아","extra":""},{"no":46,"name":"화훼장식","tasks":"5","duration":"11시간30분","taskTimes":"제1과제 : 1시간 30분\n제2과제 : 2시간\n제3과제 : 2시간\n제4과제 : 3시간\n제5과제 : 3시간","days":["","","","사전준비시간\n제1과제","제2과제","제3과제","제4과제","제5과제\n경기종료","채점","채점종료","","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"5","openBefore":"5","openAfter":"","supply":"채점기준\n과제별 지급","venue":"송도컨벤시아","extra":""},{"no":47,"name":"헤어디자인","tasks":"4","duration":"9시간 10분","taskTimes":"제1과제 : 2시간 40분\n제2과제 : 1시간 40분\n제3과제 : 2시간 40분\n제4과제 : 2시간 10분","days":["","","사전준비시간","제1과제","제2과제","제3과제","제4과제 경기종료","채점","","채점종료","","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"6","openBefore":"6","openAfter":"","supply":"채점기준\n과제별 지급","venue":"송도컨벤시아","extra":""},{"no":48,"name":"요리","tasks":"2","duration":"12시간","taskTimes":"제1과제 : 4시간 (정리정돈 포함)\n 제2과제 : 4시간 (정리정돈 포함)","days":["","","사전준비시간","","제1과제","","제2과제","채점종료","","","","","","폐회식"],"note":"","dist":"과제별\n별도배부","openTotal":"3","openBefore":"3","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":49,"name":"제과","tasks":"4","duration":"14시간","taskTimes":"제1과제 : 2시간 30분\n제2과제 : 4시간 30분\n제3과제 : 3시간 30분\n제4과제 : 3시간 30분","days":["","","","","","","","사전준비시간","제1과제","제2과제","제3과제","제4과제 경기종료 채점","채점종료","폐회식"],"note":"","dist":"단일배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":50,"name":"제빵","tasks":"4","duration":"14시간","taskTimes":"제1과제 : 4시간 30분\n제2과제 : 3시간 30분\n제3과제 : 3시간 30분\n제4과제 : 2시간 30분","days":["","","사전준비시간","제1과제","제2과제","제3과제","제4과제 경기종료 채점","채점종료","","","","","","폐회식"],"note":"","dist":"단일배부","openTotal":"4","openBefore":"4","openAfter":"","supply":"","venue":"송도컨벤시아","extra":""},{"no":51,"name":"피부미용","tasks":"5","duration":"10시간 40분","taskTimes":"제1과제 : 2시간\n제2과제 : 2시간 30분\n제3과제 : 2시간\n제4과제 : 1시간 40분\n제5과제 : 2시간 30분","days":["","","사전준비시간","제4과제 제3과제","제2과제","제5과제","제1과제","경기종료\n채점종료","","","","","","폐회식"],"note":"","dist":"일자별배부","openTotal":"5","openBefore":"5","openAfter":"","supply":"채점기준\n일자별 지급","venue":"송도컨벤시아","extra":""}]};
+
+// 우리 학교(대전도시과학고) 출전 직종
+const SCHOOL = ['자동차페인팅', '산업용드론제어'];
+
+// 워크숍·개회식·경기장 참관 일정 (day: 0=8.22 ... 6=8.28)
+const VISITS = [
+  {day:2, vip:'교육감',   time:'11:30~14:00', title:'직업계고 전공심화동아리 활성화 워크숍 (학교 격려 간담회)', place:'라마다송도호텔'},
+  {day:2, vip:'교육감',   time:'14:30~15:30', title:'경기장 참관 — 메카트로닉스(2홀), 제과·제빵·산업제어(4홀, 1층), 피부미용(그랜드볼룸 C홀, 2층)', place:'송도컨벤시아'},
+  {day:2, vip:'',        time:'15:30~16:00', title:'학교별 자유 참관', place:'송도컨벤시아'},
+  {day:2, vip:'교육감',   time:'16:00~17:20', title:'전국기능경기대회 개회식 참관', place:'송도컨벤시아 2층 그랜드볼룸'},
+  {day:2, vip:'교육감',   time:'17:30~18:30', title:'전국시도교육감 환영 만찬', place:'송도컨벤시아 3층'},
+  {day:3, vip:'교육감',   time:'10:30~11:30', title:'경기장 참관 — 자동차페인팅, 산업용드론제어, 농업기계정비', place:'재능대학교 송도캠퍼스 야외경기장', ours:true},
+  {day:3, vip:'부교육감', time:'15:00~16:30', title:'경기장 참관 — 용접(실습동 1층), 클라우드컴퓨팅(4층), 애니메이션(5층) · 공업전자기기(인천전자마이스터고 체육관)', place:'인천소방고 · 인천전자마이스터고'},
+  {day:3, vip:'부교육감', time:'17:00~20:00', title:'기능경기대회 참가학교 격려 간담회', place:'인천 송도 인근 식당'},
+  {day:4, vip:'부교육감', time:'10:30~11:30', title:'경기장 참관 — 금형(7동 1층), 기계설계/CAD(9동 2층)', place:'인천기계공업고'}
+];
+
+// 대전 직업계고 참가 현황 (8교 18직종 54명)
+const DAEJEON = [
+  {school:'계룡디지텍고', event:'IT네트워크시스템', n:3, venue:'제6경기장 송도컨벤시아'},
+  {school:'계룡디지텍고', event:'클라우드컴퓨팅', n:3, venue:'제3경기장 인천소방고'},
+  {school:'대전대성여자고', event:'제과', n:3, venue:'제6경기장 송도컨벤시아'},
+  {school:'대전대성여자고', event:'제빵', n:1, venue:'제6경기장 송도컨벤시아'},
+  {school:'대전대성여자고', event:'피부미용', n:1, venue:'제6경기장 송도컨벤시아'},
+  {school:'대전대성여자고', event:'웹디자인 및 개발', n:3, venue:'제2경기장 부평공업고'},
+  {school:'대전대성여자고', event:'애니메이션', n:3, venue:'제3경기장 인천소방고'},
+  {school:'대전도시과학고', event:'자동차페인팅', n:2, venue:'제5경기장 재능대 송도캠퍼스', ours:true},
+  {school:'대전도시과학고', event:'산업용드론제어', n:4, venue:'제5경기장 재능대 송도캠퍼스', ours:true},
+  {school:'대전생활과학고', event:'피부미용', n:1, venue:'제6경기장 송도컨벤시아'},
+  {school:'대전신일여자고', event:'그래픽디자인', n:3, venue:'제2경기장 부평공업고'},
+  {school:'대전신일여자고', event:'제빵', n:2, venue:'제6경기장 송도컨벤시아'},
+  {school:'동아마이스터고', event:'공업전자기기', n:3, venue:'제4경기장 인천전자마이스터고'},
+  {school:'동아마이스터고', event:'금형', n:3, venue:'제1경기장 인천기계공업고'},
+  {school:'동아마이스터고', event:'메카트로닉스', n:4, venue:'제6경기장 송도컨벤시아'},
+  {school:'유성생명과학고', event:'농업기계정비', n:4, venue:'제5경기장 재능대 송도캠퍼스'},
+  {school:'충남기계공업고', event:'기계설계/CAD', n:3, venue:'제1경기장 인천기계공업고'},
+  {school:'충남기계공업고', event:'산업제어', n:3, venue:'제6경기장 송도컨벤시아'},
+  {school:'충남기계공업고', event:'용접', n:3, venue:'제3경기장 인천소방고'},
+  {school:'충남기계공업고', event:'보석가공', n:2, venue:'제2경기장 부평공업고'}
+];
+
+// 교직원 출장·초과근무 계획 (day: 0=8.22 ... 6=8.28)
+const STAFF_GROUPS = [
+  {
+    title: '지도교사 — 이융구(자동차페인팅) · 임정수(산업용드론제어)',
+    members: [
+      {name:'이융구', sub:'지도교사 · 자동차페인팅'},
+      {name:'임정수', sub:'지도교사 · 산업용드론제어'}
+    ],
+    trip: [0, 6], tripLabel: '8. 22.(토) ~ 8. 28.(금) · 6박 7일',
+    duties: [
+      '출전 선수 및 예비 선수 관리',
+      '경기 전반적인 진행 상황 파악 및 문제 발생 시 대처',
+      '출전에 따른 각종 업무 처리 및 지원'
+    ],
+    overtime: [
+      {days:[0,1], time:'09:00 ~ 24:00', h:15},
+      {days:[2,3,4], time:'16:30 ~ 21:30', h:5},
+      {days:[5], time:'00:00 ~ 05:00', h:5}
+    ]
+  },
+  {
+    title: '교장 · 직업교육부장 · 행정실',
+    members: [
+      {name:'한혁', sub:'교장', label:'한혁 교장', itin:[
+        {day:2, rows:[
+          ['07:30', '출발', '장대푸르지오'],
+          ['10:30', '도착', '호텔498'],
+          ['11:00 ~ 11:30', '라마다 송도 이동', ''],
+          ['11:30 ~ 14:00', '전공심화동아리 활성화 워크숍', '라마다송도호텔'],
+          ['14:30 ~ 17:00', '경기장 참관 (교육감)', '송도컨벤시아'],
+          ['17:00 ~ 17:30', '학교 선수들 격려', '연수장터삼겹살'],
+          ['17:30 ~', '전국시도교육감 환영만찬', '송도컨벤시아 3층']
+        ]},
+        {day:3, rows:[
+          ['08:30 ~ 09:30', '조식', ''],
+          ['09:30 ~ 11:30', '교육감 경기장 참관', '재능대학교'],
+          ['12:00 ~ 13:00', '점심식사', ''],
+          ['13:00 ~ 17:00', '경기장 참관 (자율)', ''],
+          ['17:00 ~ 20:00', '기능경기대회 참가학교 간담회', '거궁 송도점']
+        ]},
+        {day:4, rows:[
+          ['08:30 ~ 09:30', '조식', ''],
+          ['09:30 ~ 12:00', '대전 이동', '']
+        ]}
+      ]},
+      {name:'직업교육부장', sub:'', itin:[
+        {day:2, rows:[
+          ['06:30 ~ 07:00', '예수마음교회', ''],
+          ['07:00 ~ 07:30', '장대푸르지오', ''],
+          ['07:30 ~ 10:30', '이동 및 도착', '호텔498'],
+          ['11:00 ~ 11:30', '라마다 송도 이동', ''],
+          ['11:30 ~ 14:00', '전공심화동아리 활성화 워크숍', '라마다송도호텔'],
+          ['14:30 ~ 17:00', '경기장 참관 (교육감)', '송도컨벤시아'],
+          ['17:00 ~', '학교 선수들 격려', '연수장터삼겹살']
+        ]},
+        {day:3, rows:[
+          ['08:30 ~ 09:30', '조식', ''],
+          ['09:30 ~ 11:30', '교육감 경기장 참관', '재능대학교'],
+          ['12:00 ~ 13:00', '점심식사', ''],
+          ['13:00 ~ 17:00', '경기장 참관 (자율)', ''],
+          ['17:00 ~ 20:00', '기능경기대회 참가학교 간담회', '거궁 송도점']
+        ]},
+        {day:4, rows:[
+          ['08:30 ~ 09:30', '조식', ''],
+          ['09:30 ~ 12:00', '대전 이동', '']
+        ]}
+      ]},
+      {name:'행정실', sub:'', itin:[
+        {day:2, rows:[
+          ['06:30 ~ 07:00', '예수마음교회', ''],
+          ['07:00 ~ 07:30', '장대푸르지오', ''],
+          ['07:30 ~ 10:30', '이동 및 도착', '호텔498'],
+          ['11:00 ~ 11:30', '라마다 송도 이동', ''],
+          ['11:30 ~ 14:00', '전공심화동아리 활성화 워크숍', '라마다송도호텔'],
+          ['14:30 ~ 17:00', '경기장 참관 (교육감)', '송도컨벤시아'],
+          ['17:00 ~', '학교 선수들 격려', '연수장터삼겹살']
+        ]},
+        {day:3, rows:[
+          ['08:30 ~ 09:30', '조식', ''],
+          ['09:30 ~ 11:30', '교육감 경기장 참관', '재능대학교'],
+          ['12:00 ~ 13:00', '점심식사', ''],
+          ['13:00 ~ 17:00', '경기장 참관 (자율)', ''],
+          ['17:00 ~', '학교 선수들 격려', '뽕달네 참숯불닭갈비']
+        ]},
+        {day:4, rows:[
+          ['08:30 ~ 09:30', '조식', ''],
+          ['09:30 ~ 12:00', '대전 이동', '']
+        ]}
+      ]} ],
+    trip: [2, 4], tripLabel: '8. 24.(월) ~ 8. 26.(수) · 2박 3일',
+    duties: [
+      '대회 개회식 및 직업계고 학교장 간담회 참석',
+      '일과 후 협의회 참석, 선수 및 지도교사 격려',
+      '타 학교 교장과의 정보 교류',
+      '경기 진행 추이에 따른 추후 전공심화동아리 지도 방향 협의'
+    ],
+    overtime: [ {days:[2,3], time:'16:30 ~ 21:30', h:5} ]
+  },
+  {
+    title: '교감 · 교무부장',
+    members: [ {name:'유병구', sub:'교감', label:'유병구 교감'}, {name:'교무부장', sub:''} ],
+    trip: [4, 5], tripLabel: '8. 26.(수) ~ 8. 27.(목) · 1박 2일',
+    duties: [
+      '일과 후 협의회 참석, 선수 및 지도교사 격려',
+      '경기 진행 방식 습득 및 추후 전공심화동아리 지도 방향 협의'
+    ],
+    overtime: [
+      {days:[4], time:'16:30 ~ 21:30', h:5},
+      {days:[5], time:'00:00 ~ 05:00', h:5}
+    ]
+  },
+  {
+    title: '학과부장',
+    members: [ {name:'학과부장', sub:''} ],
+    trip: [1, 2], tripLabel: '8. 23.(일) ~ 8. 24.(월) · 1박 2일',
+    duties: [
+      '출전 선수 및 예비 선수 관리',
+      '출전에 따른 각종 업무 처리 및 지원'
+    ],
+    overtime: [ {days:[1], time:'09:00 ~ 24:00', h:15} ]
+  }
+];
+
+const DAYS = [
+  {d:'8.22', w:'토'},{d:'8.23', w:'일'},{d:'8.24', w:'월'},{d:'8.25', w:'화'},
+  {d:'8.26', w:'수'},{d:'8.27', w:'목'},{d:'8.28', w:'금'}
+];
+const VENUE_NO = {
+  '인천기계공업고등학교':'제1경기장','부평공업고등학교':'제2경기장','인천소방고등학교':'제3경기장',
+  '인천전자마이스터고등학교':'제4경기장','재능대학교 송도캠퍼스':'제5경기장','송도컨벤시아':'제6경기장'
+};
+const VENUES = ['송도컨벤시아','인천기계공업고등학교','부평공업고등학교','인천소방고등학교','인천전자마이스터고등학교','재능대학교 송도캠퍼스'];
+
+const STAGES = [
+  {k:'tools', label:'공구·장비 반입', c:'var(--st-tools)'},
+  {k:'prep',  label:'사전준비',       c:'var(--st-prep)'},
+  {k:'comp',  label:'경기',           c:'var(--st-comp)'},
+  {k:'score', label:'채점',           c:'var(--st-score)'},
+  {k:'end',   label:'종료',           c:'var(--st-end)'},
+  {k:'cere',  label:'폐회식',         c:'var(--st-cere)'}
+];
+function stageOf(line){
+  if(/폐회식|시상식/.test(line)) return 'cere';
+  if(/종료/.test(line)) return 'end';
+  if(/채점/.test(line)) return 'score';
+  if(/반입/.test(line)) return 'tools';
+  if(/사전\s*준비|기술회의|프로그램설치|시운전|자리배치|경기준비|사전점검/.test(line)) return 'prep';
+  return 'comp';
+}
+const stageColor = k => STAGES.find(s=>s.k===k).c;
+
+// 오늘 (대회 기간이면 강조)
+function todayIndex(){
+  const t = new Date();
+  const base = new Date(2026,7,22); // 2026-08-22
+  const diff = Math.floor((t - base) / 86400000);
+  return (diff >= 0 && diff < 7) ? diff : -1;
+}
+const TODAY = todayIndex();
+
+// 즐겨찾기
+let favs = [];
+try { favs = JSON.parse(localStorage.getItem('skill61_favs')||'[]'); } catch(e){}
+const isFav = no => favs.includes(no);
+function toggleFav(no){
+  favs = isFav(no) ? favs.filter(x=>x!==no) : [...favs, no];
+  try { localStorage.setItem('skill61_favs', JSON.stringify(favs)); } catch(e){}
+  renderCards(); renderDay();
+}
+
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function tagsHTML(cell){
+  if(!cell) return '<span class="empty-slot">–</span>';
+  return cell.split('\n').filter(l=>l.trim()).map(l=>{
+    const st = stageOf(l);
+    return `<span class="tag" style="--stc:${stageColor(st)}">${esc(l.trim())}</span>`;
+  }).join('');
+}
+
+/* ---- 직종별 ---- */
+let query = '', venueFilter = '__school';
+const norm = s => s.replace(/\s+/g,'').toLowerCase();
+const isOurs = e => SCHOOL.includes(e.name);
+
+function cardHTML(e, open){
+  const days7 = [];
+  for(let i=0;i<7;i++){
+    const cls = (i===TODAY) ? 'tl-date today' : 'tl-date';
+    days7.push(`<div class="tl-row">
+      <div class="${cls}">${DAYS[i].d}<small>${DAYS[i].w}요일${i===TODAY?' · 오늘':''}</small></div>
+      <div class="slot"><span class="slot-l">오전</span>${tagsHTML(e.days[i*2])}</div>
+      <div class="slot"><span class="slot-l">오후</span>${tagsHTML(e.days[i*2+1])}</div>
+    </div>`);
+  }
+  const openInfo = e.openBefore ? `경기 전 ${e.openBefore}개` : (e.openAfter ? `경기 후 ${e.openAfter}개` : '');
+  return `<details class="card" data-no="${e.no}" ${open?'open':''}>
+    <summary>
+      <span class="no">${e.no}</span>
+      <span class="nm">${esc(e.name)}</span>
+      ${isOurs(e) ? '<span class="school-badge">우리 학교</span>' : ''}
+      <span class="vn">${esc(e.venue.split('\n')[0])}</span>
+      <button class="star ${isFav(e.no)?'on':''}" data-fav="${e.no}" aria-label="즐겨찾기" title="즐겨찾기">★</button>
+      <span class="chev">›</span>
+    </summary>
+    <div class="card-body">
+      <dl class="meta">
+        <div><dt>과제 수 · 경기시간</dt><dd>${esc(e.tasks)}개 · ${esc(e.duration)}</dd></div>
+        <div><dt>과제별 시간</dt><dd>${esc(e.taskTimes)}</dd></div>
+        <div><dt>과제 배부</dt><dd>${esc(e.dist||'–')}</dd></div>
+        <div><dt>채점기준 개봉</dt><dd>${openInfo ? esc(openInfo) : '–'}${e.supply ? '\n'+esc(e.supply) : ''}</dd></div>
+        <div><dt>경기장</dt><dd>${esc(e.venue)}</dd></div>
+      </dl>
+      <div class="tl">${days7.join('')}</div>
+      ${e.note ? `<div class="note-box">${esc(e.note)}</div>` : ''}
+      ${e.extra ? `<div class="note-box">${esc(e.extra)}</div>` : ''}
+    </div>
+  </details>`;
+}
+
+function renderCards(){
+  const openSet = new Set([...document.querySelectorAll('#cards details[open]')].map(d=>+d.dataset.no));
+  const schoolMode = venueFilter === '__school' && !query; // 검색 중에는 전체에서 찾기
+  let list = DATA.events.filter(e=>{
+    if(schoolMode && !isOurs(e)) return false;
+    if(!schoolMode && venueFilter && venueFilter !== '__school' && !e.venue.includes(venueFilter)) return false;
+    if(query && !norm(e.name).includes(norm(query))) return false;
+    return true;
+  });
+  list = [...list].sort((a,b)=> (isOurs(b)-isOurs(a)) || (isFav(b.no)-isFav(a.no)) || (a.no-b.no));
+  document.getElementById('count').textContent = schoolMode
+    ? `우리 학교 출전 ${list.length}개 직종 — 전체 51개 직종은 위의 '전체'를 누르세요`
+    : `${list.length}개 직종` + (favs.length?` · ★ 즐겨찾기 ${favs.length}개는 맨 위에 표시됩니다`:'');
+  document.getElementById('cards').innerHTML =
+    list.length ? list.map(e=>cardHTML(e, schoolMode || openSet.has(e.no))).join('') : '<p class="count">검색 결과가 없습니다.</p>';
+}
+
+document.getElementById('q').addEventListener('input', e=>{ query=e.target.value; renderCards(); });
+document.getElementById('cards').addEventListener('click', e=>{
+  const b = e.target.closest('[data-fav]');
+  if(b){ e.preventDefault(); toggleFav(+b.dataset.fav); }
+});
+
+// 경기장 필터 칩
+(function(){
+  const box = document.getElementById('venueChips');
+  box.innerHTML = `<button class="on" data-v="__school">★ 우리 학교</button><button data-v="">전체</button>` +
+    VENUES.map(v=>`<button data-v="${v}">${v.replace('고등학교','고').replace(' 송도캠퍼스','')}</button>`).join('');
+  box.addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    venueFilter = b.dataset.v;
+    [...box.children].forEach(x=>x.classList.toggle('on', x===b));
+    renderCards();
+  });
+})();
+
+// 범례
+document.getElementById('legend').innerHTML =
+  STAGES.map(s=>`<span><i style="--stc:${s.c}"></i>${s.label}</span>`).join('');
+
+/* ---- 일자별 ---- */
+let dayIdx = TODAY >= 0 ? TODAY : 0;
+(function(){
+  const box = document.getElementById('daystrip');
+  box.innerHTML = DAYS.map((d,i)=>
+    `<button data-i="${i}"><span class="d">${d.d}</span><span class="w">${d.w}</span>${i===TODAY?'<span class="today-dot"></span>':''}</button>`
+  ).join('');
+  box.addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    dayIdx = +b.dataset.i; renderDay();
+  });
+})();
+
+function visitRow(v){
+  return `<div class="vrow ${v.ours?'ours':''}">
+    <span class="vt">${v.time}</span>
+    <div class="vc">${v.ours?'<span class="ours-b">★ 우리 학교 직종</span> · ':''}${v.vip?`<b>[${v.vip}]</b> `:''}${esc(v.title)}
+      <span class="pl">${esc(v.place)}</span></div>
+  </div>`;
+}
+
+function renderDay(){
+  [...document.getElementById('daystrip').children].forEach((b,i)=>b.classList.toggle('on', i===dayIdx));
+  const visits = VISITS.filter(v=>v.day===dayIdx);
+  const visitBlock = visits.length ? `
+    <div class="day-visits">
+      <h3>행사·참관 일정</h3>
+      ${visits.map(visitRow).join('')}
+    </div>` : '';
+  // 우리 학교 직종을 최상단 별도 그룹으로
+  const oursRows = DATA.events.filter(isOurs)
+    .map(e=>({e, am:e.days[dayIdx*2], pm:e.days[dayIdx*2+1]}))
+    .filter(r=>r.am || r.pm);
+  const oursBlock = oursRows.length ? `
+    <div class="vgroup">
+      <h3>우리 학교 <small>제5경기장 재능대학교 송도캠퍼스</small></h3>
+      ${oursRows.map(r=>`<div class="dayrow ours">
+        <span class="nm2">${esc(r.e.name)}</span>
+        <div class="slot"><span class="slot-l">오전</span>${tagsHTML(r.am)}</div>
+        <div class="slot"><span class="slot-l">오후</span>${tagsHTML(r.pm)}</div>
+      </div>`).join('')}
+    </div>` : '';
+  const groups = VENUES.map(v=>{
+    const rows = DATA.events
+      .filter(e=>e.venue.includes(v))
+      .map(e=>({e, am:e.days[dayIdx*2], pm:e.days[dayIdx*2+1]}))
+      .filter(r=>r.am || r.pm);
+    return {v, rows};
+  }).filter(g=>g.rows.length);
+  const groupHTML = groups.map(g=>`
+    <div class="vgroup">
+      <h3>${g.v} <small>${VENUE_NO[g.v]||''} · ${g.rows.length}개 직종</small></h3>
+      ${g.rows.map(r=>`<div class="dayrow ${isOurs(r.e)?'ours':''}">
+        <span class="nm2">${isFav(r.e.no)?'<span class="fav">★</span> ':''}${esc(r.e.name)}</span>
+        <div class="slot"><span class="slot-l">오전</span>${tagsHTML(r.am)}</div>
+        <div class="slot"><span class="slot-l">오후</span>${tagsHTML(r.pm)}</div>
+      </div>`).join('')}
+    </div>`).join('');
+  document.getElementById('dayBody').innerHTML =
+    visitBlock + oursBlock + (groups.length ? groupHTML : (visits.length||oursRows.length ? '' : '<p class="count">이 날짜에는 일정이 없습니다.</p>'));
+}
+
+/* ---- 경기장 ---- */
+(function(){
+  const box = document.getElementById('venueCards');
+  box.innerHTML = VENUES.map(v=>{
+    const evs = DATA.events.filter(e=>e.venue.includes(v));
+    return `<div class="vcard">
+      <div class="vk">${VENUE_NO[v]||''}</div>
+      <h3>${v}</h3>
+      <div class="vlist">${evs.map(e=>`<span data-go="${e.no}">${esc(e.name)}</span>`).join('')}</div>
+      <a href="https://map.naver.com/p/search/${encodeURIComponent(v)}" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a>
+    </div>`;
+  }).join('');
+  box.addEventListener('click', e=>{
+    const s = e.target.closest('[data-go]'); if(!s) return;
+    const ev = DATA.events.find(x=>x.no===+s.dataset.go);
+    query = ev.name; venueFilter = '';
+    document.getElementById('q').value = ev.name;
+    const chips = document.getElementById('venueChips');
+    [...chips.children].forEach((x,i)=>x.classList.toggle('on', i===1));
+    switchTab('p-skill');
+    renderCards();
+    const card = document.querySelector(`#cards details[data-no="${ev.no}"]`);
+    if(card){ card.open = true; card.scrollIntoView({behavior:'smooth',block:'start'}); }
+  });
+})();
+
+/* ---- 워크숍·참관 ---- */
+(function(){
+  const byDay = {};
+  VISITS.forEach(v=>{ (byDay[v.day] = byDay[v.day] || []).push(v); });
+  document.getElementById('visitList').innerHTML = Object.keys(byDay).sort().map(d=>{
+    const vips = [...new Set(byDay[d].map(v=>v.vip).filter(Boolean))];
+    return `<div class="visit-day">${DAYS[d].d}(${DAYS[d].w})
+      ${vips.map(v=>`<span class="vipb">${v} 참석</span>`).join('')}</div>` +
+      byDay[d].map(visitRow).join('');
+  }).join('');
+
+  document.getElementById('daejeonTbl').innerHTML =
+    `<tr><th>학교명</th><th>출전 직종</th><th>인원</th><th>경기장</th></tr>` +
+    DAEJEON.map(r=>`<tr class="${r.ours?'ours-row':''}">
+      <td>${esc(r.school)}${r.ours?' ★':''}</td><td>${esc(r.event)}</td>
+      <td style="text-align:right">${r.n}명</td><td>${esc(r.venue)}</td></tr>`).join('') +
+    `<tr><th colspan="2">합계 — 8교 18개 직종</th><th style="text-align:right">54명</th><th></th></tr>`;
+})();
+
+/* ---- 선생님 일정 ---- */
+(function(){
+  const inTrip = (g, d) => d >= g.trip[0] && d <= g.trip[1];
+  // 선생님별 평탄화 목록 (표시 순서 고정)
+  const ORDER = ['한혁','유병구','이융구','임정수','직업교육부장','교무부장','학과부장','행정실'];
+  const TEACHERS = [];
+  STAFF_GROUPS.forEach(g => g.members.forEach(m => TEACHERS.push({ ...m, g })));
+  TEACHERS.sort((a,b) => ORDER.indexOf(a.name) - ORDER.indexOf(b.name));
+  let selected = -1; // 선택 전에는 한눈에 보기만
+
+  function renderMatrix(){
+    let rows = `<tr><th>선생님</th>${DAYS.map(d=>`<th style="text-align:center">${d.d}<br>(${d.w})</th>`).join('')}</tr>`;
+    TEACHERS.forEach((t, i) => {
+      rows += `<tr class="${i===selected?'sel':''}"><td class="rolecell"><b>${t.name}</b>${t.sub?`<small>${t.sub}</small>`:''}</td>` +
+        DAYS.map((_,d)=>`<td class="${inTrip(t.g,d)?'trip':''}"></td>`).join('') + '</tr>';
+    });
+    document.getElementById('staffMatrix').innerHTML = rows;
+  }
+
+  function renderStaff(){
+    const tabs = document.getElementById('staffTabs');
+    tabs.innerHTML = TEACHERS.map((t,i)=>
+      `<button class="${i===selected?'on':''}" data-t="${i}">${t.label||t.name}</button>`).join('');
+    const box = document.getElementById('staffDetail');
+    if(selected < 0){ box.innerHTML = ''; renderMatrix(); return; }
+    const t = TEACHERS[selected], g = t.g;
+    box.innerHTML = `
+      <div class="staff-card staff-pop">
+        <button class="pop-close" data-close aria-label="닫기">×</button>
+        <h3>${t.name}${t.sub?` <small class="pop-sub">${t.sub}</small>`:''}</h3>
+        <p class="trip-line">출장 ${g.tripLabel}</p>
+        ${t.itin ? `<div class="itin">
+          <p class="itin-h">세부 일정</p>
+          ${t.itin.map(d=>`<div class="visit-day">${DAYS[d.day].d}(${DAYS[d.day].w})</div>` +
+            d.rows.map(r=>`<div class="vrow"><span class="vt">${r[0]}</span>
+              <div class="vc">${esc(r[1])}${r[2]?`<span class="pl">${esc(r[2])}</span>`:''}</div></div>`).join('')
+          ).join('')}
+        </div>` : ''}
+        <ul>${g.duties.map(d=>`<li>${d}</li>`).join('')}</ul>
+        <table class="mini-tbl">
+          <tr><th>일자</th><th>시간</th><th>초과근무</th></tr>
+          ${g.overtime.map(o=>{
+            const f = o.days[0], l = o.days[o.days.length-1];
+            const lbl = f===l ? `${DAYS[f].d}(${DAYS[f].w})` : `${DAYS[f].d}(${DAYS[f].w}) ~ ${DAYS[l].d}(${DAYS[l].w})`;
+            return `<tr><td>${lbl}</td><td>${o.time}</td><td>일 ${o.h}시간</td></tr>`;
+          }).join('')}
+        </table>
+      </div>`;
+    renderMatrix();
+  }
+
+  document.getElementById('staffTabs').addEventListener('click', e=>{
+    const b = e.target.closest('button[data-t]'); if(!b) return;
+    const i = +b.dataset.t;
+    selected = (selected === i) ? -1 : i; // 같은 이름 다시 누르면 닫기
+    renderStaff();
+  });
+  document.getElementById('staffDetail').addEventListener('click', e=>{
+    if(e.target.closest('[data-close]')){ selected = -1; renderStaff(); }
+  });
+
+  renderStaff();
+})();
+
+/* ---- 안내 ---- */
+document.getElementById('notesList').innerHTML =
+  DATA.notes.map(n=>`<li>${esc(n).replace(/\n\s*/g,'\n')}</li>`).join('');
+
+/* ---- 탭 ---- */
+function switchTab(id){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.pane===id)));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on', p.id===id));
+  window.scrollTo({top:0});
+}
+document.querySelector('nav.tabs').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  switchTab(b.dataset.pane);
+});
+
+renderCards(); renderDay();
+</script>
+
+</html>
